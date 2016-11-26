@@ -1,0 +1,10 @@
+{
+  "name": "helloworld",
+  "dependencies": {
+    "solc":"0.3.4",
+    "eris-db": "0.15.0",
+    "eris-contracts":"0.13.3"
+
+
+  }
+}
