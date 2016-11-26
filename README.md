@@ -25,3 +25,81 @@
 node = "http://134.168.62.175:1337/rpc"
 
 compiler = "http://134.168.56.175:9099"
+
+
+Last Contract:
+
+contract BuildingManager {
+  
+uint public contAddress;
+mapping(uint => address) builderMapper;
+mapping(int => bool) builderMapper2;
+mapping(int => bool) funcionariosRegistradores;
+mapping(int => address) idBuildingAaddress;
+
+function BuildingManager(){
+   contAddress = 0;
+   funcionariosRegistradores[0] = true;
+   funcionariosRegistradores[1] = true;
+   funcionariosRegistradores[2] = true;
+   funcionariosRegistradores[3] = true;
+   funcionariosRegistradores[4] = true;
+}
+
+
+function createBuilding (string owner, int idBuilding, int idFuncionario, int date) private returns (address) {
+  address newBuilding = new Building(owner, idBuilding, idFuncionario, date);
+  builderMapper[contAddress] = newBuilding;
+  contAddress++;
+  builderMapper2[idBuilding] = true;
+  idBuildingAaddress[idBuilding] = newBuilding;
+  return newBuilding;
+}
+
+function getCounter () returns (uint) {
+  return contAddress;
+}
+
+
+function existBuilding(int idBuilding) returns (bool){
+   return builderMapper2[idBuilding];
+  
+}
+
+function buldingValidator (string owner, int idBuilding, int idFuncionario, int date) returns (bool){
+  
+  if (existBuilding(idBuilding) != true && funcionariosRegistradores[idFuncionario]){
+      createBuilding (owner, idBuilding, idFuncionario, date);
+      return true;
+  }else{
+      return false;
+  }
+}
+
+function sellBuyBuilding (int idBuilding, string newOwner) returns (bool){
+   address direccion = idBuildingAaddress[idBuilding];
+   if (direccion != 0){
+       Building casita = Building(direccion);
+       casita.setOwner(newOwner);
+       return true;
+   }
+       return false;
+   }
+}
+contract Building {
+   
+string owner;
+int idBuilding;
+int idFuncionario;
+int date;
+
+  function Building (string _owner, int _idBuilding, int _idFuncionario, int _date) {
+      owner = _owner;
+      idBuilding = _idBuilding;
+      idFuncionario = _idFuncionario;
+      date = _date;
+  }
+  function setOwner (string newOwner){
+      owner = newOwner;
+  }
+}
